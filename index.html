@@ -8,6 +8,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <style>
@@ -62,13 +63,14 @@
     <div class="legend-item"><img src="./media/icons/Dustira.png"> Rumah Sakit Dustira</div>
   </div>  
     </head>
-    
+    </head>
     <body>
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/L.Control.Locate.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -83,7 +85,7 @@
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-6.975977179476263,107.41435649765464],[-6.800966471897641,107.74518528874657]]);
+        }).fitBounds([[-6.8753921066028925,107.52327735004789],[-6.846223655339789,107.57841548189654]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -118,6 +120,7 @@
         var zoomControl = L.control.zoom({
             position: 'topleft'
         }).addTo(map);
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
@@ -137,12 +140,10 @@
         function pop_AdminKelurahan_1(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">SHAPE_Leng</th>\
-                        <td class="visible-with-data" id="SHAPE_Leng">' + (feature.properties['SHAPE_Leng'] !== null ? autolinker.link(String(feature.properties['SHAPE_Leng']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Leng'] !== null ? autolinker.link(String(feature.properties['SHAPE_Leng']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">SHAPE_Area</th>\
-                        <td class="visible-with-data" id="SHAPE_Area">' + (feature.properties['SHAPE_Area'] !== null ? autolinker.link(String(feature.properties['SHAPE_Area']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? autolinker.link(String(feature.properties['SHAPE_Area']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Desa</th>\
@@ -164,53 +165,17 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_AdminKelurahan_1_0(feature) {
-            switch(String(feature.properties['Kecamatan'])) {
-                case 'Cimahi Selatan':
-                    return {
+        function style_AdminKelurahan_1_0() {
+            return {
                 pane: 'pane_AdminKelurahan_1',
                 opacity: 1,
-                color: 'rgba(203,25,28,1.0)',
+                color: 'rgba(184,169,0,1.0)',
                 dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,255,204,1.0)',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
                 interactive: true,
-            }
-                    break;
-                case 'Cimahi Tengah':
-                    return {
-                pane: 'pane_AdminKelurahan_1',
-                opacity: 1,
-                color: 'rgba(203,25,28,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(120,198,121,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'Cimahi Utara':
-                    return {
-                pane: 'pane_AdminKelurahan_1',
-                opacity: 1,
-                color: 'rgba(203,25,28,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(0,104,55,1.0)',
-                interactive: true,
-            }
-                    break;
             }
         }
         map.createPane('pane_AdminKelurahan_1');
@@ -249,7 +214,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 2.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -283,12 +248,10 @@
                         <td class="visible-with-data" id="FCODE">' + (feature.properties['FCODE'] !== null ? autolinker.link(String(feature.properties['FCODE']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">REMARK</th>\
-                        <td class="visible-with-data" id="REMARK">' + (feature.properties['REMARK'] !== null ? autolinker.link(String(feature.properties['REMARK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['REMARK'] !== null ? autolinker.link(String(feature.properties['REMARK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Shape_Leng</th>\
-                        <td class="visible-with-data" id="Shape_Leng">' + (feature.properties['Shape_Leng'] !== null ? autolinker.link(String(feature.properties['Shape_Leng']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? autolinker.link(String(feature.properties['Shape_Leng']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -306,7 +269,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 2.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -347,7 +310,7 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-       // Layer Cagar Budaya Kota Cimahi
+// Layer Cagar Budaya Kota Cimahi
 map.createPane('pane_CagarBudayaKotaCimahi_4');
 map.getPane('pane_CagarBudayaKotaCimahi_4').style.zIndex = 404;
 map.getPane('pane_CagarBudayaKotaCimahi_4').style['mix-blend-mode'] = 'normal';
@@ -364,7 +327,7 @@ function pop_CagarBudayaKotaCimahi_4(feature, layer) {
   layer.bindPopup(popupContent, { maxHeight: 400 });
 }
 
-// Fungsi untuk menyesuaikan ikon berdasarkan nama fitur
+        // Fungsi untuk menyesuaikan ikon berdasarkan nama fitur
 function pointToIcon(feature, latlng) {
   const iconMap = {
     'Gedung Historich': 'historich.png',
@@ -401,9 +364,9 @@ var layer_CagarBudayaKotaCimahi_4 = new L.geoJson(json_CagarBudayaKotaCimahi_4, 
   pointToLayer: pointToIcon
 });
 
-// Tambahkan layer ke grup dan peta
-bounds_group.addLayer(layer_CagarBudayaKotaCimahi_4);
-map.addLayer(layer_CagarBudayaKotaCimahi_4);
+        // Tambahkan layer ke grup dan peta
+    bounds_group.addLayer(layer_CagarBudayaKotaCimahi_4);
+    map.addLayer(layer_CagarBudayaKotaCimahi_4);
         </script>
 
 <div class="legend" id="map-legend">
